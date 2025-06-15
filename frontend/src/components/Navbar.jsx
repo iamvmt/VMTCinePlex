@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { MenuIcon, SearchIcon, XIcon } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { MenuIcon, SearchIcon, TicketPlus, XIcon } from 'lucide-react'
+import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -8,10 +9,13 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+ const{user} = useUser()
+ const{openSignIn} = useClerk()
 
+ const navigate = useNavigate()
   return (
     <>
-      <div className='fixed top-0 bottom-90 left-0 z-50 w-full flex items-center justify-between px-0 md:px-3 lg:px-4 py-0 backdrop-blur-md border-b-md border-slate-1000/50'>
+      <div className='fixed top-0 bottom-90 left-0 z-50 w-full flex items-center justify-between px-0 md:px-3 lg:px-4 py-0'>
         {/* Logo */}
        <Link to='/' className='flex-shrink-0'>
           <div className='flex items-center gap-2'>
@@ -62,9 +66,23 @@ const Navbar = () => {
         {/* Right side - Search and Login */}
         <div className='flex items-center gap-4'>
           <SearchIcon className='max-md:hidden w-5 h-5 cursor-pointer text-white hover:text-gray-300 transition-colors' />
-          <button className='px-6 py-2 bg-red-500 hover:bg-red-600 transition-colors rounded-full font-medium cursor-pointer text-white whitespace-nowrap text-sm'>
+          { 
+            !user ? (
+            <button onClick={openSignIn} className='px-6 py-2 bg-red-500 hover:bg-red-600 transition-colors rounded-full font-medium cursor-pointer text-white whitespace-nowrap text-sm'>
             Login
           </button>
+            ) : (
+            <UserButton>
+              <UserButton.MenuItems>
+                 <UserButton.Action label="My Bookings" labelIcon={<TicketPlus width={15}/>}
+                  onClick={() =>navigate('/my-bookings')} 
+                 />
+
+              </UserButton.MenuItems>
+            </UserButton>
+            )
+
+            }
         </div>
         
         <MenuIcon 
