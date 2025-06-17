@@ -1,4 +1,3 @@
-// pages/Favorites.jsx
 import React, { useState, useMemo } from 'react';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { dummyShowsData } from '../assets/assets.js';
@@ -43,7 +42,7 @@ const Favorites = () => {
   }, [favorites, sortBy, sortOrder]);
 
   const toggleSortOrder = () => {
-    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
   if (getFavoritesCount() === 0) {
@@ -54,13 +53,13 @@ const Favorites = () => {
         <Heart className='w-16 h-16 text-gray-300 mb-4' />
         <h1 className='text-2xl font-bold text-gray-700 mb-2'>No Favorites Yet</h1>
         <p className='text-sm text-gray-500 mb-6'>Start adding movies to your favorites by clicking the heart icon.</p>
-        <a href="/movies" className='px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition'>Browse Movies</a>
+        <a href="/movies" className='px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition cursor-pointer'>Browse Movies</a>
       </div>
     );
   }
 
   return (
-    <div className='relative px-4 py-8 md:px-12 min-h-[70vh] pt-24'>
+    <div className='relative px-4 py-8 md:px-12 min-h-[70vh] pt-24 text-gray-800'>
       <BlurRedCircle top="100px" left="0px" />
       <BlurRedCircle bottom="30px" right='30px'/>
 
@@ -68,7 +67,7 @@ const Favorites = () => {
       <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4'>
         <div className='flex items-center gap-2'>
           <Heart className='w-6 h-6 text-red-600 fill-current' />
-          <h1 className='text-2xl font-bold text-gray-800'>My Favorites</h1>
+          <h1 className='text-2xl font-bold'>My Favorites</h1>
           <span className='bg-red-100 text-red-800 px-2 py-0.5 rounded-full text-xs font-medium'>{getFavoritesCount()}</span>
         </div>
 
@@ -86,7 +85,7 @@ const Favorites = () => {
             </select>
             <button
               onClick={toggleSortOrder}
-              className='p-1 border border-gray-300 rounded-md hover:bg-gray-100 text-gray-600'
+              className='p-1 border border-gray-300 rounded-md hover:bg-gray-100 text-gray-600 transition-colors duration-200'
               title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
             >
               {sortOrder === 'asc' ? <SortAsc size={16} /> : <SortDesc size={16} />}
@@ -95,7 +94,7 @@ const Favorites = () => {
 
           <button
             onClick={handleClearAll}
-            className='flex items-center gap-1 px-3 py-1 text-red-600 border border-red-300 rounded-md hover:bg-red-50 text-sm'
+            className='flex items-center gap-1 px-3 py-1 text-red-600 border border-red-300 rounded-md hover:bg-red-50 text-sm transition-colors duration-200'
           >
             <Trash2 size={14} /> Clear All
           </button>
@@ -116,7 +115,7 @@ const Favorites = () => {
       </div>
 
       {/* Stats */}
-      <div className="mt-10 p-4 bg-red-50 rounded-lg border border-red-100">
+      <div className="mt-10 p-4 bg-red-50 rounded-lg border border-red-100 shadow-sm">
         <h3 className="text-base font-semibold text-red-800 mb-3">Your Stats</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm text-red-700">
           <div>
