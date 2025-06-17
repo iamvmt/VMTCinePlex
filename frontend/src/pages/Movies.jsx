@@ -5,15 +5,17 @@ import { useFavorites } from '../contexts/FavoritesContext';
 import MovieCard from '../components/MovieCard.jsx';
 import BlurRedCircle from '../components/BlurRedCircle.jsx';
 import { Heart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Movies = () => {
   const { favorites, toggleFavorite, isFavorite, getFavoritesCount } = useFavorites();
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('title');
   
+  const navigate = useNavigate();
   const handleBuyTicket = (movie) => {
-    alert(`Buying tickets for "${movie.title}"\nRelease Date: ${new Date(movie.release_date).toLocaleDateString()}\nRating: ${movie.vote_average}/10`);
-  };
+   navigate(`/movies/${movie._id}#dateSelect`);
+  }; 
 
   // Memoized filtered and sorted movies
   const filteredAndSortedMovies = useMemo(() => {

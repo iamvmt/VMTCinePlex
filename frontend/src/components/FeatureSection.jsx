@@ -4,11 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import BlurRedCircle from './BlurRedCircle';
 import MovieCard from './MovieCard';
 import { dummyShowsData } from '../assets/assets.js';
-import { useFavorites } from '../contexts/FavoritesContext'; // 👈 import context
+import { useFavorites } from '../contexts/FavoritesContext'; 
 
 const FeatureSection = () => {
   const navigate = useNavigate();
-  const { favorites, toggleFavorite } = useFavorites(); // 👈 get state/actions
+  const { favorites, toggleFavorite } = useFavorites(); 
+  const handleBuyTicket = (movie) => {
+  navigate(`/movies/${movie._id}#dateSelect`);
+};
+
 
   return (
     <div className="px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden">

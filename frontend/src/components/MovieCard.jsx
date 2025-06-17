@@ -9,7 +9,7 @@ const MovieCard = ({ movie, onToggleFavorite, isFavorite, onBuyTicket }) => {
   const handleFavoriteClick = (e) => {
     e.stopPropagation();
     if (onToggleFavorite) {
-      onToggleFavorite(movie._id); // Call global toggle from context
+      onToggleFavorite(movie._id);
     }
   };
 
@@ -17,11 +17,13 @@ const MovieCard = ({ movie, onToggleFavorite, isFavorite, onBuyTicket }) => {
     e.stopPropagation();
     if (onBuyTicket) {
       onBuyTicket(movie);
+    } else {
+      navigate(`/movies/${movie._id}#dateSelect`);
     }
   };
 
   return (
-    <div className="relative group">
+    <div className="relative group w-48">
       <img
         onClick={() => {
           navigate(`/movies/${movie._id}`);
@@ -45,7 +47,7 @@ const MovieCard = ({ movie, onToggleFavorite, isFavorite, onBuyTicket }) => {
       </button>
 
       <div className="mt-2">
-        <h3 className="font-semibold text-sm">{movie.title}</h3>
+        <h3 className="font-semibold text-sm line-clamp-2">{movie.title}</h3>
 
         <p className="text-xs text-gray-600 mt-1">
           {new Date(movie.release_date).getFullYear()} •{' '}
@@ -74,3 +76,4 @@ const MovieCard = ({ movie, onToggleFavorite, isFavorite, onBuyTicket }) => {
 };
 
 export default MovieCard;
+
