@@ -1,31 +1,76 @@
-import { StarIcon } from 'lucide-react'
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import timeFormat from '../lib/timeFormat'
+import { StarIcon, HeartIcon, TicketIcon } from 'lucide-react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import timeFormat from '../lib/timeFormat';
 
-const MovieCard = ({ movie }) => {
-  const navigate = useNavigate()
-     
+const MovieCard = ({ movie, onToggleFavorite, isFavorite, onBuyTicket }) => {
+  const navigate = useNavigate();
+
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation();
+    if (onToggleFavorite) {
+      onToggleFavorite(movie._id); // Call global toggle from context
+    }
+  };
+
+  const handleBuyTicketsClick = (e) => {
+    e.stopPropagation();
+    if (onBuyTicket) {
+      onBuyTicket(movie);
+    }
+  };
+
   return (
-    <div className='flex flex-col justify-between p-1.5 bg-gray-800 rounded-xl hover:-translate-y-1 transition duration-300 w-40 flex-shrink-0'>
-      <img 
-        onClick={() => { navigate(`/movies/${movie.id}`); window.scrollTo(0, 0) }}
-        src={movie.backdrop_path} 
-        alt={movie.title} 
-        className='rounded-md h-24 w-full object-cover object-center cursor-pointer' 
+    <div className="relative group">
+      <img
+        onClick={() => {
+          navigate(`/movies/${movie._id}`);
+          window.scrollTo(0, 0);
+        }}
+        src={movie.backdrop_path}
+        alt={movie.title}
+        className="rounded-md h-24 w-full object-cover object-center cursor-pointer"
       />
-      <p className='font-medium mt-1 truncate text-xs leading-tight'>
-        {movie.title}
-      </p>
-      <p className='text-[8px] text-gray-400 mt-0.5 leading-tight truncate'>
-        {new Date(movie.release_date).getFullYear()} • {movie.genres?.slice(0, 2).map(genre => genre.name).join(' | ')} • {timeFormat(movie.runtime)} min
-      </p>
-      <p className='flex items-center gap-0.5 text-xs text-gray-400 mt-0.5'>
-        <StarIcon className='w-3 h-3 text-primary fill-primary' />
-        {movie.vote_average?.toFixed(1)}
-      </p>
-    </div>
-  )
-}
 
-export default MovieCard
+      {/* Favorite Button - Top Right */}
+      <button
+        onClick={handleFavoriteClick}
+        className={`absolute top-2 right-2 p-1.5 rounded-full transition-all duration-200 ${
+          isFavorite
+            ? 'bg-red-500 text-white'
+            : 'bg-black/50 text-white hover:bg-black/70'
+        }`}
+      >
+        <HeartIcon size={16} fill={isFavorite ? 'currentColor' : 'none'} />
+      </button>
+
+      <div className="mt-2">
+        <h3 className="font-semibold text-sm">{movie.title}</h3>
+
+        <p className="text-xs text-gray-600 mt-1">
+          {new Date(movie.release_date).getFullYear()} •{' '}
+          {movie.genres?.slice(0, 2).map((genre) => genre.name).join(' | ')} •{' '}
+          {timeFormat(movie.runtime)} min
+        </p>
+
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center space-x-1">
+            <StarIcon size={14} className="text-yellow-500" fill="currentColor" />
+            <span className="text-sm font-medium">{movie.vote_average?.toFixed(1)}</span>
+          </div>
+
+          {/* Buy Tickets Button */}
+          <button
+            onClick={handleBuyTicketsClick}
+            className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs font-medium transition-colors duration-200"
+          >
+            <TicketIcon size={12} />
+            <span>Tickets</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MovieCard;

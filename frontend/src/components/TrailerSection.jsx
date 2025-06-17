@@ -1,14 +1,16 @@
-import React from 'react'
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { dummyTrailers } from '../assets/assets.js';
 import ReactPlayer from 'react-player/lazy';
 import BlurRedCircle from './BlurRedCircle';
 
 const TrailerSection = () => {
   const [currentTrailerIndex, setCurrentTrailerIndex] = useState(0);
-  // Auto-scroll functionality
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Auto-scroll functionality - only when not playing
   useEffect(() => {
+    if (isPlaying) return; // Don't auto-scroll when video is playing
+
     const interval = setInterval(() => {
       setCurrentTrailerIndex((prevIndex) => 
         (prevIndex + 1) % dummyTrailers.length
@@ -16,7 +18,7 @@ const TrailerSection = () => {
     }, 5000); // Change trailer every 5 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isPlaying]); // Re-run effect when isPlaying changes
 
   const goToPrevious = () => {
     setCurrentTrailerIndex((prevIndex) => 
@@ -30,13 +32,25 @@ const TrailerSection = () => {
     );
   };
 
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+  };
+
+  const handleEnded = () => {
+    setIsPlaying(false);
+  };
+
   return (
     <div className='px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden py-16'>
       <p className='text-gray-300 font-medium text-lg mb-8'>Trailers</p>
-      
+             
       <div className='relative'>
         <BlurRedCircle top='-100px' right='-100px'/>
-        
+                 
         {/* Main trailer container with navigation arrows */}
         <div className='relative w-[40vw] min-w-[400px] max-w-[600px] mx-auto'>
           {/* Previous Arrow */}
@@ -62,6 +76,9 @@ const TrailerSection = () => {
                 left: 0
               }}
               className="rounded-xl overflow-hidden shadow-2xl"
+              onPlay={handlePlay}
+              onPause={handlePause}
+              onEnded={handleEnded}
             />
           </div>
 
