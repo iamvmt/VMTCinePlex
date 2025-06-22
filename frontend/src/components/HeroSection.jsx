@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 const HeroSection = () => {
 
-    const naviagate = useNavigate()
+    const navigate = useNavigate()
   return (
     <div className='flex flex-col items-start justify-center gap-4 px-6 md:px-16 lg:px-36 bg-[url("/bgimg2.jpeg")] bg-cover bg-center h-screen'>
       
