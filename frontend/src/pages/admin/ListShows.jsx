@@ -14,7 +14,7 @@ const ListShows = () => {
           setShows([{
             movie: dummyShowsData[0],
             showDateTime: "2025-06-30T14:30:00Z",
-            showPrice: 250,
+            showPrice: 50,
             occupiedSeats: {
               A1: "user_1",
               B1: "user_2",
@@ -37,8 +37,7 @@ const ListShows = () => {
   <>
     <Title text1="List" text2="Shows" />
     <div className='max-w-4xl mt-6 overflow-x-auto'>
-      <table className='w-full border-collapse rounded-md overflow-hidden
-      text-nowrap'>
+      <table className='w-full border-collapse rounded-md overflow-hidden text-nowrap'>
          <thead>
             <tr className='bg-primary/20 text-left text-white'>
               <th className='p-2 font-medium pl-5'>Movie Name</th>
@@ -46,14 +45,17 @@ const ListShows = () => {
               <th className='p-2 font-medium'>Total Bookings</th>
               <th className='p-2 font-medium'>Earnings</th>
             </tr>
-
          </thead>
-         {/* <tbody className='text-sm font-light'>
+         <tbody className='text-sm font-light'>
             {shows.map((show, index) => (
-              <tr key={index} className='border-b border-primary
-
-         </tbody> */}
-
+              <tr key={index} className='border-b border-primary'>
+                <td className='p-2 pl-5'>{show.movie.title}</td>
+                <td className='p-2'>{new Date(show.showDateTime).toLocaleString()}</td>
+                <td className='p-2'>{Object.keys(show.occupiedSeats).length}</td>
+                <td className='p-2'>{currency} {Object.keys(show.occupiedSeats).length * show.showPrice}</td>
+              </tr>
+            ))}
+         </tbody>
       </table>
     </div>
   </>
