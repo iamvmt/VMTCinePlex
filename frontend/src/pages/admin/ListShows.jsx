@@ -39,7 +39,7 @@ const ListShows = () => {
     <div className='max-w-4xl mt-6 overflow-x-auto'>
       <table className='w-full border-collapse rounded-md overflow-hidden text-nowrap'>
          <thead>
-            <tr className='bg-primary/20 text-left text-white'>
+            <tr className='bg-primary' style={{ opacity: 0.85, color: 'white', textAlign: 'left' }}>
               <th className='p-2 font-medium pl-5'>Movie Name</th>
               <th className='p-2 font-medium'>Show Date & Time</th>
               <th className='p-2 font-medium'>Total Bookings</th>
@@ -48,7 +48,14 @@ const ListShows = () => {
          </thead>
          <tbody className='text-sm font-light'>
             {shows.map((show, index) => (
-              <tr key={index} className='border-b border-primary'>
+              <tr
+                key={index}
+                className='bg-primary'
+                style={{
+                  opacity: index % 2 === 0 ? 0.65 : 0.25,
+                  borderBottom: '2px solid var(--color-primary)'
+                }}
+              >
                 <td className='p-2 pl-5'>{show.movie.title}</td>
                 <td className='p-2'>{new Date(show.showDateTime).toLocaleString()}</td>
                 <td className='p-2'>{Object.keys(show.occupiedSeats).length}</td>
