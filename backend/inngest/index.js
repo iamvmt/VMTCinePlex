@@ -1,5 +1,5 @@
 import {Inngest} from "inngest";
-import User from "../models/user.js";
+import user from "../models/user.js";
 
 
 // Create a client to send and receive events
@@ -17,7 +17,7 @@ const syncUserCreation = inngest.createFunction(
         name: `${first_name} ${last_name}`,
         image: image_url
      }
-     await User.create(userData);
+     await user.create(userData);
     }
 )
 
@@ -28,7 +28,7 @@ const syncUserDeletion = inngest.createFunction(
     {event: 'clerk/user.deleted'},
     async ({ event })=>{
      const {id} = event.data;
-     await User.findByIdAndDelete(id);
+     await user.findByIdAndDelete(id);
     }
 )
 
@@ -44,7 +44,7 @@ const syncUserUpdation = inngest.createFunction(
         name: `${first_name} ${last_name}`,
         image: image_url
      }
-     await User.findbyIdAndUpdate(id, userData);
+     await user.findbyIdAndUpdate(id, userData);
        
     }
 )
