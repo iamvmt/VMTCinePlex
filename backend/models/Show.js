@@ -7,6 +7,6 @@ const showSchema = new mongoose.Schema({
     occupiedSeats: {type: Object, default: {}},
 }, {minimize: false});
 
-const show = mongoose.model('Show', showSchema);
+const Show = mongoose.model('Show', showSchema);
 
 export default Show;
