@@ -21,6 +21,21 @@ export const addShow = async (req, res) => {
     try{
         const { movieId, showsInput, showPrice } = req.body;
 
+        // Add validation
+        if (!movieId || !showsInput || !showPrice) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Missing required fields: movieId, showsInput, and showPrice are required" 
+            });
+        }
+
+        if (!Array.isArray(showsInput) || showsInput.length === 0) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "showsInput must be a non-empty array" 
+            });
+        }
+
         let movie = await Movie.findById(movieId);
         if(!movie){
            const[movieDetailsResponse, movieCreditsResponse] = 
