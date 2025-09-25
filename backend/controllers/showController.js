@@ -53,7 +53,8 @@ export const addShow = async (req, res) => {
                 overview: movieApiData.overview,
                 poster_path: movieApiData.poster_path,
                 backdrop_path: movieApiData.backdrop_path,
-                genres: movieApiData.genres,
+                genre: movieApiData.genres, // Changed from 'genres' to 'genre'
+                casts: movieCreditsData.cast, // Added missing 'casts' field
                 release_date: movieApiData.release_date,
                 original_language: movieApiData.original_language,
                 tagline: movieApiData.tagline || "",
@@ -87,6 +88,54 @@ export const addShow = async (req, res) => {
             }
             res.status(201).json({ success: true, message: "Show(s) added successfully" });
         } catch (error){
+            res.status(500).json({message: error.message});
+        }
+    }
+
+    //API to get all shows from the database  
+    export const getShows = async (req, res) => {
+        try{
+            const shows = await Show.find({showDateTime: {$gte: new Date()}}).populate('movie').sort({showDateTime: 1});
+            
+            // Get unique movies using Map to avoid duplicates
+            const uniqueMoviesMap = new Map();
+            shows.forEach(show => {
+                if (!uniqueMoviesMap.has(show.movie._id)) {
+                    uniqueMoviesMap.set(show.movie._id, show.movie);
+                }
+            });
+            
+            const uniqueMovies = Array.from(uniqueMoviesMap.values());
+            res.json({success: true, shows: uniqueMovies});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: error.message});
+        }
+    }
+
+    //API to get a show from the database
+    export const getShow = async(req, res) => {
+        try{
+            const {movieId} = req.params;
+
+            const shows = await Show.find({movie: movieId, showDateTime: {$gte: new Date()}})
+
+            const movie = await Movie.findById(movieId);
+
+            const dateTime = {};
+
+            shows.forEach(show => {
+                const date = show.showDateTime.toISOString().split('T')[0];
+                if(!dateTime[date]){
+                    dateTime[date] = [];
+                }
+                dateTime[date].push({time: show.showDateTime, showId: show._id });
+                
+                
+            });
+            res.json({success: true, movie, dateTime});
+        } catch (error) {
+            console.error(error);
             res.status(500).json({message: error.message});
         }
     }
