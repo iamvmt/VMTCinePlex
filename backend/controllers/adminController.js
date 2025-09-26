@@ -1,4 +1,4 @@
-import { User } from "@clerk/express";
+import  User  from "../models/User.js";
 import Booking from "../models/Booking.js";
 import Show from "../models/Show.js";
 
@@ -6,8 +6,24 @@ import Show from "../models/Show.js";
 //API to check if user is admin
 
 export const isAdmin = async (req, res) => {
-    res.json({success: true, isAdmin: true});
+    try {
+        const { userId } = req.auth(); 
+        
+        if (!userId) {
+            return res.json({success: false, isAdmin: false});
+        }
+        
+        const { clerkClient } = await import('@clerk/clerk-sdk-node');
+        const user = await clerkClient.users.getUser(userId);
+        
+        const isAdminUser = user.publicMetadata?.role === 'admin';
+        
+        res.json({success: true, isAdmin: isAdminUser});
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, isAdmin: false});
     }
+}
 
 
 //API to get dashboard data
